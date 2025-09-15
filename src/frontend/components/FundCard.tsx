@@ -1,6 +1,6 @@
 import React from 'react';
 import { TrendingUp, TrendingDown, Info, Plus } from 'lucide-react';
-import { Fund } from '../data/mockData';
+import { Fund } from '../types';
 import { formatCurrency, formatAssets, formatPercentage, getPerformanceColor, getRiskLevel } from '../utils/formatters';
 
 interface FundCardProps {

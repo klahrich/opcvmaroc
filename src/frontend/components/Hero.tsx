@@ -1,7 +1,11 @@
 import React from 'react';
 import { TrendingUp, Shield, Target } from 'lucide-react';
 
-const Hero = () => {
+interface HeroProps {
+  onScrollToFunds: () => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onScrollToFunds }) => {
   return (
     <section id="home" className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -11,11 +15,14 @@ const Hero = () => {
             <span className="block text-yellow-400">avec les OPCVMs</span>
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto">
-            Découvrez, comparez et investissez dans les meilleurs fonds communs de placement du Maroc. 
+            Découvrez, comparez et investissez dans les meilleurs fonds communs de placement du Maroc.
             Diversifiez votre portefeuille selon votre profil de risque.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-yellow-500 hover:bg-yellow-600 text-blue-900 font-semibold px-8 py-3 rounded-lg transition-colors">
+            <button
+              onClick={onScrollToFunds}
+              className="bg-yellow-500 hover:bg-yellow-600 text-blue-900 font-semibold px-8 py-3 rounded-lg transition-colors"
+            >
               Explorer les Fonds
             </button>
             <button className="border-2 border-white text-white hover:bg-white hover:text-blue-900 font-semibold px-8 py-3 rounded-lg transition-colors">

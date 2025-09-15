@@ -1,6 +1,6 @@
 import React from 'react';
-import { X, TrendingUp, BarChart3, DollarSign, Clock } from 'lucide-react';
-import { Fund } from '../data/mockData';
+import { X, TrendingUp, BarChart3, DollarSign, Clock, Calculator } from 'lucide-react';
+import { Fund } from '../types';
 import { formatCurrency, formatAssets, formatPercentage, getPerformanceColor, getRiskLevel } from '../utils/formatters';
 
 interface FundModalProps {
