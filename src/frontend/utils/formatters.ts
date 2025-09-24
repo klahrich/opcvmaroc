@@ -15,9 +15,9 @@ export const formatAssets = (amount: number): string => {
   return `${amount} MAD`;
 };
 
-export const formatPercentage = (value: number, showSign: boolean = true): string => {
+export const formatPercentage = (value: number, showSign: boolean = true, multiply_100: boolean = false): string => {
   const sign = showSign && value > 0 ? '+' : '';
-  return `${sign}${value.toFixed(2)}%`;
+  return `${sign}${(multiply_100 ? value * 100 : value).toFixed(2)}%`;
 };
 
 export const getPerformanceColor = (performance: number): string => {

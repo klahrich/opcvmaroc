@@ -69,7 +69,7 @@ const FundCard: React.FC<FundCardProps> = ({ fund, onViewDetails, onAddToSimulat
 
         <div className="flex justify-between items-center">
           <span className="text-sm text-gray-600">Frais de gestion</span>
-          <span className="font-semibold text-gray-900">{formatPercentage(fund.managementFee, false)}</span>
+          <span className="font-semibold text-gray-900">{formatPercentage(fund.managementFee, false, true)}</span>
         </div>
 
         <div className="flex justify-between items-center">
