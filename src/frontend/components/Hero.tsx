@@ -1,5 +1,6 @@
 import React from 'react';
 import { TrendingUp, Shield, Target } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface HeroProps {
   onScrollToFunds: () => void;
@@ -25,9 +26,12 @@ const Hero: React.FC<HeroProps> = ({ onScrollToFunds }) => {
             >
               Explorer les Fonds
             </button>
-            <button className="border-2 border-white text-white hover:bg-white hover:text-blue-900 font-semibold px-8 py-3 rounded-lg transition-colors">
+            <Link
+              to="/simulation"
+              className="border-2 border-white text-white hover:bg-white hover:text-blue-900 font-semibold px-8 py-3 rounded-lg transition-colors"
+            >
               Commencer la Simulation
-            </button>
+            </Link>
           </div>
         </div>
 
