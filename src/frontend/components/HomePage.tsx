@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import Hero from './Hero';
 import FinancialCorner from './FinancialCorner';
 import FundsList from './FundsList';
+import CallToAction from './CallToAction';
 
 const HomePage = () => {
   const fundsRef = useRef<HTMLDivElement>(null);
@@ -17,6 +18,7 @@ const HomePage = () => {
       <div ref={fundsRef}>
         <FundsList />
       </div>
+      <CallToAction />
     </>
   );
 };
