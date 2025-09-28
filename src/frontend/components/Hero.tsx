@@ -31,7 +31,7 @@ const Hero: React.FC<HeroProps> = ({ onScrollToFunds }) => {
             </a>
             <Link
               to="/simulation"
-              className="border-2 border-white text-white hover:bg-white hover:text-blue-900 font-semibold px-8 py-3 rounded-lg transition-colors"
+              className="bg-white text-blue-900 hover:bg-blue-100 font-semibold px-8 py-3 rounded-lg transition-colors"
             >
               Commencer la Simulation
             </Link>
