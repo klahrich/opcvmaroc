@@ -22,16 +22,16 @@ const Hero: React.FC<HeroProps> = ({ onScrollToFunds }) => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={onScrollToFunds}
-              className="bg-yellow-500 hover:bg-yellow-600 text-blue-900 font-semibold px-8 py-3 rounded-lg transition-colors flex items-center"
+              className="bg-yellow-500 hover:bg-yellow-600 text-blue-900 font-semibold px-8 py-3 rounded-lg transition-colors flex items-center justify-center"
             >
               <span role="img" aria-label="chart" className="mr-2">📈</span> Explorer les Fonds
             </button>
-            <a href="#community" className="bg-green-500 hover:bg-green-600 text-blue-900 font-semibold px-8 py-3 rounded-lg transition-colors flex items-center">
+            <a href="#community" className="bg-green-500 hover:bg-green-600 text-blue-900 font-semibold px-8 py-3 rounded-lg transition-colors flex items-center justify-center">
               <span role="img" aria-label="people" className="mr-2">👥</span> Rejoindre la Communauté
             </a>
             <Link
               to="/simulation"
-              className="bg-white text-blue-900 hover:bg-blue-100 font-semibold px-8 py-3 rounded-lg transition-colors flex items-center"
+              className="bg-white text-blue-900 hover:bg-blue-100 font-semibold px-8 py-3 rounded-lg transition-colors flex items-center justify-center"
             >
               <span role="img" aria-label="rocket" className="mr-2">🚀</span> Commencer la Simulation
             </Link>
