@@ -26,6 +26,9 @@ const Hero: React.FC<HeroProps> = ({ onScrollToFunds }) => {
             >
               Explorer les Fonds
             </button>
+            <a href="#community" className="bg-green-500 hover:bg-green-600 text-blue-900 font-semibold px-8 py-3 rounded-lg transition-colors">
+              Rejoindre la Communauté
+            </a>
             <Link
               to="/simulation"
               className="border-2 border-white text-white hover:bg-white hover:text-blue-900 font-semibold px-8 py-3 rounded-lg transition-colors"
