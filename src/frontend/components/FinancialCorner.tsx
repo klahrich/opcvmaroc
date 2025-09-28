@@ -89,7 +89,7 @@ const FinancialCorner = () => {
           <div>
             <div className="flex items-center mb-6">
               <BookOpen className="h-6 w-6 text-emerald-600 mr-2" />
-              <h3 className="text-2xl font-bold text-gray-900">Éducation Financière</h3>
+              <h3 className="text-2xl font-bold text-gray-900">Parcours Financier</h3>
             </div>
             <div className="space-y-6">
               {educationalPosts.map((post, index) => (
