@@ -1,103 +1,34 @@
-import React, { useState } from 'react';
-import { Search, Filter, TrendingUp, TrendingDown, Info } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, Filter, TrendingUp, TrendingDown, Info, X } from 'lucide-react';
+import { Fund } from '../types';
+import FundModal from './FundModal';
+import fundsData from '../funds.json';
 
 const FundsList = () => {
+  const [funds, setFunds] = useState<Fund[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState('all');
-  const [selectedFund, setSelectedFund] = useState(null);
+  const [selectedFund, setSelectedFund] = useState<Fund | null>(null);
+  const [visibleCount, setVisibleCount] = useState(6);
 
-  const funds = [
-    {
-      id: 1,
-      name: "BMCE Actions",
-      type: "Actions",
-      manager: "BMCE Capital Gestion",
-      performance1y: 12.5,
-      performance3y: 8.7,
-      volatility: 15.2,
-      subscriptionFee: 1.5,
-      managementFee: 1.8,
-      exitFee: 0.5,
-      minInvestment: 1000,
-      description: "Fonds investi principalement en actions marocaines cotées à la Bourse de Casablanca",
-      assets: 450000000
-    },
-    {
-      id: 2,
-      name: "Attijariwafa Monétaire",
-      type: "Monétaire",
-      manager: "Wafa Gestion",
-      performance1y: 3.2,
-      performance3y: 3.1,
-      volatility: 0.8,
-      subscriptionFee: 0.5,
-      managementFee: 0.75,
-      exitFee: 0,
-      minInvestment: 500,
-      description: "Fonds monétaire privilégiant la sécurité et la liquidité des investissements",
-      assets: 1200000000
-    },
-    {
-      id: 3,
-      name: "CDG Diversifié",
-      type: "Diversifié",
-      manager: "CDG Capital Gestion",
-      performance1y: 7.8,
-      performance3y: 6.4,
-      volatility: 8.5,
-      subscriptionFee: 1.0,
-      managementFee: 1.5,
-      exitFee: 0.3,
-      minInvestment: 2000,
-      description: "Portefeuille équilibré combinant actions, obligations et instruments monétaires",
-      assets: 800000000
-    },
-    {
-      id: 4,
-      name: "Crédit Agricole Obligations",
-      type: "Obligataire",
-      manager: "CAM Gestion",
-      performance1y: 4.5,
-      performance3y: 4.2,
-      volatility: 3.1,
-      subscriptionFee: 0.8,
-      managementFee: 1.2,
-      exitFee: 0.2,
-      minInvestment: 1500,
-      description: "Fonds spécialisé dans les obligations d'État et corporate marocaines",
-      assets: 650000000
-    },
-    {
-      id: 5,
-      name: "BMCI Croissance",
-      type: "Actions",
-      manager: "BMCI Asset Management",
-      performance1y: 15.2,
-      performance3y: 11.3,
-      volatility: 18.7,
-      subscriptionFee: 2.0,
-      managementFee: 2.0,
-      exitFee: 0.8,
-      minInvestment: 3000,
-      description: "Fonds dynamique ciblant les entreprises à fort potentiel de croissance",
-      assets: 320000000
-    },
-    {
-      id: 6,
-      name: "Popular Équilibré",
-      type: "Diversifié",
-      manager: "Popular Asset Management",
-      performance1y: 6.9,
-      performance3y: 5.8,
-      volatility: 7.2,
-      subscriptionFee: 1.2,
-      managementFee: 1.6,
-      exitFee: 0.4,
-      minInvestment: 1000,
-      description: "Allocation stratégique entre différentes classes d'actifs pour un risque maîtrisé",
-      assets: 580000000
-    }
-  ];
+  useEffect(() => {
+    const formattedFunds: Fund[] = fundsData.map((fund: any, index: number) => ({
+      id: index,
+      name: fund.OPCVM,
+      type: fund.Classification.split(' ').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' '),
+      manager: fund['Société de Gestion'],
+      performance1y: parseFloat((fund['1 an'] * 100).toFixed(2)),
+      performance3y: parseFloat((fund['3 ans'] * 100).toFixed(2)),
+      volatility: 0, // This data is not in funds.json, default to 0
+      subscriptionFee: fund['Commission de souscription'] * 100,
+      managementFee: fund['Frais de gestion'] * 100,
+      exitFee: fund[' Commission de rachat'] * 100,
+      minInvestment: 1000, // This data is not in funds.json, default to 1000
+      description: `Fonds de classification ${fund.Classification.toLowerCase()} géré par ${fund['Société de Gestion']}.`,
+      assets: fund.AN,
+    }));
+    setFunds(formattedFunds);
+  }, []);
 
   const filteredFunds = funds.filter(fund => {
     const matchesSearch = fund.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -106,19 +37,19 @@ const FundsList = () => {
     return matchesSearch && matchesType;
   });
 
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('fr-MA', {
+  const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'MAD',
-      minimumFractionDigits: 0
+      minimumFractionDigits: 2,
     }).format(amount);
   };
 
-  const formatAssets = (amount) => {
+  const formatAssets = (amount: number): string => {
     if (amount >= 1000000000) {
-      return `${(amount / 1000000000).toFixed(1)}Md MAD`;
+      return `${(amount / 1000000000).toFixed(1)} Md MAD`;
     } else if (amount >= 1000000) {
-      return `${(amount / 1000000).toFixed(0)}M MAD`;
+      return `${(amount / 1000000).toFixed(0)} M MAD`;
     }
     return `${amount} MAD`;
   };
@@ -165,7 +96,7 @@ const FundsList = () => {
 
         {/* Funds Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredFunds.map((fund) => (
+          {filteredFunds.slice(0, visibleCount).map((fund) => (
             <div
               key={fund.id}
               className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer"
@@ -225,6 +156,17 @@ const FundsList = () => {
           ))}
         </div>
 
+        {visibleCount < filteredFunds.length && (
+          <div className="text-center mt-8">
+            <button
+              onClick={() => setVisibleCount(prevCount => prevCount + 6)}
+              className="bg-blue-800 hover:bg-blue-900 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+            >
+              Afficher plus
+            </button>
+          </div>
+        )}
+
         {filteredFunds.length === 0 && (
           <div className="text-center py-12">
             <p className="text-gray-600 text-lg">Aucun fonds trouvé avec ces critères de recherche.</p>
@@ -234,82 +176,7 @@ const FundsList = () => {
 
       {/* Modal for fund details */}
       {selectedFund && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex justify-between items-start mb-6">
-                <div>
-                  <h3 className="text-2xl font-bold text-gray-900">{selectedFund.name}</h3>
-                  <p className="text-gray-600">{selectedFund.manager}</p>
-                </div>
-                <button
-                  onClick={() => setSelectedFund(null)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X className="h-6 w-6" />
-                </button>
-              </div>
-
-              <p className="text-gray-700 mb-6">{selectedFund.description}</p>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Performance</h4>
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span>1 an</span>
-                      <span className={`font-semibold ${selectedFund.performance1y > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                        {selectedFund.performance1y > 0 ? '+' : ''}{selectedFund.performance1y}%
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>3 ans (annualisé)</span>
-                      <span className={`font-semibold ${selectedFund.performance3y > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                        {selectedFund.performance3y > 0 ? '+' : ''}{selectedFund.performance3y}%
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Volatilité</span>
-                      <span className="font-semibold text-gray-900">{selectedFund.volatility}%</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-4">Structure des Frais</h4>
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span>Frais de souscription</span>
-                      <span className="font-semibold text-gray-900">{selectedFund.subscriptionFee}%</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Frais de gestion</span>
-                      <span className="font-semibold text-gray-900">{selectedFund.managementFee}%</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Frais de sortie</span>
-                      <span className="font-semibold text-gray-900">{selectedFund.exitFee}%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <div className="flex justify-between items-center mb-4">
-                  <span className="text-gray-700">Investissement minimum</span>
-                  <span className="text-lg font-semibold text-gray-900">{formatCurrency(selectedFund.minInvestment)}</span>
-                </div>
-                <div className="flex justify-between items-center mb-6">
-                  <span className="text-gray-700">Actifs sous gestion</span>
-                  <span className="text-lg font-semibold text-gray-900">{formatAssets(selectedFund.assets)}</span>
-                </div>
-                <button className="w-full bg-blue-800 hover:bg-blue-900 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
-                  Ajouter à la simulation
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <FundModal fund={selectedFund} onClose={() => setSelectedFund(null)} />
       )}
     </section>
   );
