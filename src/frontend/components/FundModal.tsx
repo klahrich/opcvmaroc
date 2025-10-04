@@ -9,7 +9,9 @@ interface FundModalProps {
 }
 
 const FundModal: React.FC<FundModalProps> = ({ fund, onClose }) => {
-  const riskLevel = getRiskLevel(fund.volatility);
+  const riskLevel = getRiskLevel(fund.annualVolatility ?? 0);
+
+  console.log("FundModal fund object:", fund);
 
   const performanceData = [
     { period: '1 mois', value: fund.performance1y / 12 },
@@ -75,11 +77,31 @@ const FundModal: React.FC<FundModalProps> = ({ fund, onClose }) => {
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-blue-700">Volatilité annuelle</span>
-                  <span className="font-semibold text-blue-900">{formatPercentage(fund.volatility, false)}</span>
+                  <span className="font-semibold text-blue-900">{formatPercentage(fund.annualVolatility ?? 0, false)}</span>
                 </div>
                 <div className="flex justify-between items-center mt-1">
                   <span className="text-blue-700">Niveau de risque</span>
                   <span className={`font-semibold ${riskLevel.color}`}>{riskLevel.level}</span>
+                </div>
+              </div>
+              <div className="mt-4 p-4 bg-yellow-50 rounded-lg">
+                <div className="flex items-center mb-2">
+                  <Calculator className="h-5 w-5 text-yellow-600 mr-2" />
+                  <span className="font-medium text-yellow-900">Ratio de Sharpe</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-yellow-700">Performance ajustée au risque</span>
+                  <span
+                    className={`font-semibold ${
+                      fund.sharpeRatio && fund.sharpeRatio > 1.5
+                        ? 'text-green-600'
+                        : fund.sharpeRatio && fund.sharpeRatio > 0.5
+                        ? 'text-yellow-600'
+                        : 'text-red-600'
+                    }`}
+                  >
+                    {fund.sharpeRatio?.toFixed(2) ?? 'N/A'}
+                  </span>
                 </div>
               </div>
             </div>

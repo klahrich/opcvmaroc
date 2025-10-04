@@ -13,4 +13,6 @@ export interface Fund {
   description: string;
   assets: number;
   expectedReturn?: number;
+  annualVolatility?: number;
+  sharpeRatio?: number;
 }

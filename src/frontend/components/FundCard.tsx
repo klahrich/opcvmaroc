@@ -11,7 +11,7 @@ interface FundCardProps {
 }
 
 const FundCard: React.FC<FundCardProps> = ({ fund, onViewDetails, onAddToSimulation, compact = false }) => {
-  const riskLevel = getRiskLevel(fund.volatility);
+  const riskLevel = getRiskLevel(fund.annualVolatility ?? 0);
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-300 hover:scale-105">
@@ -84,6 +84,31 @@ const FundCard: React.FC<FundCardProps> = ({ fund, onViewDetails, onAddToSimulat
           </div>
         )}
       </div>
+
+      {!compact && (
+        <div className="space-y-2 mb-4">
+          <div className="flex justify-between items-center">
+            <span className="text-sm text-gray-600">Volatilité annuelle</span>
+            <span className="font-semibold text-gray-900">
+              {formatPercentage(fund.annualVolatility ?? 0)}
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-sm text-gray-600">Ratio de Sharpe</span>
+            <span
+              className={`font-semibold ${
+                fund.sharpeRatio && fund.sharpeRatio > 1.5
+                  ? 'text-green-600'
+                  : fund.sharpeRatio && fund.sharpeRatio > 0.5
+                  ? 'text-yellow-600'
+                  : 'text-red-600'
+              }`}
+            >
+              {fund.sharpeRatio?.toFixed(2) ?? 'N/A'}
+            </span>
+          </div>
+        </div>
+      )}
 
       <div className="flex gap-2">
         <button

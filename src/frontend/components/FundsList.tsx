@@ -26,6 +26,8 @@ const FundsList = () => {
       minInvestment: 1000, // This data is not in funds.json, default to 1000
       description: `Fonds de classification ${fund.Classification.toLowerCase()} géré par ${fund['Société de Gestion']}.`,
       assets: fund.AN,
+      annualVolatility: fund.annualVolatility,
+      sharpeRatio: fund.sharpeRatio,
     }));
     setFunds(formattedFunds);
   }, []);
