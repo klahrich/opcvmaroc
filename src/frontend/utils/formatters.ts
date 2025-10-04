@@ -1,3 +1,5 @@
+import { ShieldCheck, Shield, ShieldAlert, ShieldClose } from 'lucide-react';
+
 export const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -31,4 +33,20 @@ export const getRiskLevel = (volatility: number): { level: string; color: string
   if (volatility < 12) return { level: 'Modéré', color: 'text-yellow-600' };
   if (volatility < 20) return { level: 'Élevé', color: 'text-orange-600' };
   return { level: 'Très Élevé', color: 'text-red-600' };
+};
+
+export const getSharpeRatioInfo = (sharpeRatio: number | null | undefined): { level: string; color: string; Icon: React.ElementType } => {
+  if (sharpeRatio === null || sharpeRatio === undefined) {
+    return { level: 'N/A', color: 'text-gray-500', Icon: () => null };
+  }
+  if (sharpeRatio > 2) {
+    return { level: 'Excellent', color: 'text-green-600', Icon: ShieldCheck };
+  }
+  if (sharpeRatio > 1) {
+    return { level: 'Bon', color: 'text-blue-600', Icon: Shield };
+  }
+  if (sharpeRatio > 0) {
+    return { level: 'Moyen', color: 'text-yellow-600', Icon: ShieldAlert };
+  }
+  return { level: 'Faible', color: 'text-red-600', Icon: ShieldClose };
 };

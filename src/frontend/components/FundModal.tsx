@@ -1,7 +1,7 @@
 import React from 'react';
 import { X, TrendingUp, BarChart3, DollarSign, Clock, Calculator } from 'lucide-react';
 import { Fund } from '../types';
-import { formatCurrency, formatAssets, formatPercentage, getPerformanceColor, getRiskLevel } from '../utils/formatters';
+import { formatCurrency, formatAssets, formatPercentage, getPerformanceColor, getRiskLevel, getSharpeRatioInfo } from '../utils/formatters';
 
 interface FundModalProps {
   fund: Fund;
@@ -10,8 +10,7 @@ interface FundModalProps {
 
 const FundModal: React.FC<FundModalProps> = ({ fund, onClose }) => {
   const riskLevel = getRiskLevel(fund.annualVolatility ?? 0);
-
-  console.log("FundModal fund object:", fund);
+  const sharpeInfo = getSharpeRatioInfo(fund.sharpeRatio);
 
   const performanceData = [
     { period: '1 mois', value: fund.performance1y / 12 },
@@ -91,17 +90,12 @@ const FundModal: React.FC<FundModalProps> = ({ fund, onClose }) => {
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-yellow-700">Performance ajustée au risque</span>
-                  <span
-                    className={`font-semibold ${
-                      fund.sharpeRatio && fund.sharpeRatio > 1.5
-                        ? 'text-green-600'
-                        : fund.sharpeRatio && fund.sharpeRatio > 0.5
-                        ? 'text-yellow-600'
-                        : 'text-red-600'
-                    }`}
-                  >
-                    {fund.sharpeRatio?.toFixed(2) ?? 'N/A'}
-                  </span>
+                  <div className="flex items-center">
+                    <sharpeInfo.Icon className={`h-4 w-4 mr-1 ${sharpeInfo.color}`} />
+                    <span className={`font-semibold ${sharpeInfo.color}`}>
+                      {sharpeInfo.level} ({fund.sharpeRatio?.toFixed(2) ?? 'N/A'})
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

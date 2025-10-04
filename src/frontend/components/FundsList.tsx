@@ -3,6 +3,7 @@ import { Search, Filter, TrendingUp, TrendingDown, Info, X } from 'lucide-react'
 import { Fund } from '../types';
 import FundModal from './FundModal';
 import fundsData from '../funds.json';
+import { getSharpeRatioInfo } from '../utils/formatters';
 
 const FundsList = () => {
   const [funds, setFunds] = useState<Fund[]>([]);
@@ -98,7 +99,9 @@ const FundsList = () => {
 
         {/* Funds Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredFunds.slice(0, visibleCount).map((fund) => (
+          {filteredFunds.slice(0, visibleCount).map((fund) => {
+            const sharpeInfo = getSharpeRatioInfo(fund.sharpeRatio);
+            return (
             <div
               key={fund.id}
               className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer"
@@ -150,12 +153,23 @@ const FundsList = () => {
                 </div>
               </div>
 
+              <div className="flex justify-between items-center mt-4">
+                <span className="text-sm text-gray-600">Ratio de Sharpe</span>
+                <div className="flex items-center">
+                  <sharpeInfo.Icon className={`h-4 w-4 mr-1 ${sharpeInfo.color}`} />
+                  <span className={`font-semibold ${sharpeInfo.color}`}>
+                    {sharpeInfo.level}
+                  </span>
+                </div>
+              </div>
+
               <button className="w-full mt-4 bg-blue-800 hover:bg-blue-900 text-white font-semibold py-2 px-4 rounded-lg transition-colors flex items-center justify-center">
                 <Info className="h-4 w-4 mr-2" />
                 Voir les détails
               </button>
             </div>
-          ))}
+          );
+        })}
         </div>
 
         {visibleCount < filteredFunds.length && (
